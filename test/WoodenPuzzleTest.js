@@ -5,15 +5,14 @@ GreeterTest.prototype.testGreet = function() {
   assertEquals("Hello World!", greeter.greet("World"));
 };
 
-/*
+
 GreeterTest.prototype.testExample = function () {
-	  expectAsserts(1);
-	  var worker = new Worker();
-	  var doSomething = {};
-	  worker.listener = function (work){
-	    assertSame(doSomething, work);
-	  };
-	  worker.perform(doSomething);
-	};
-	
-	*/
+  expectAsserts(1);
+  var worker = new Worker();
+  var doSomething = {};
+  worker.listener = function (work){
+    assertSame(doSomething, work);
+  };
+  worker.perform(doSomething);
+};
+
