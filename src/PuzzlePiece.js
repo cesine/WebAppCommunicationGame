@@ -1,0 +1,3 @@
+var WOODENSHAPEGAME = this.WOODENSHAPEGAME || {};
+
+//WOODENSHAPEGAME.puzzlePiece = {};

@@ -1,3 +1,12 @@
+/*
+TestCase('TestPuzzlePiece', sinon.testCase({
+
+  "test should be an object": function(){
+    assertObject(WOODENSHAPEGAME.puzzlePiece);
+  }
+
+}));*/
+
 GreeterTest = TestCase("GreeterTest");
  
 GreeterTest.prototype.testGreet = function() {
@@ -61,70 +70,4 @@ AsynchronousTest.prototype.testSomethingComplicated = function(queue) {
   });
 };
 
-var NoopTest = AsyncTestCase('NoopTest');
 
-NoopTest.prototype.testNoop = function(queue) {
-  var asynchronousSystem = {};
-  assertFalse(asynchronousSystem.wasTriggered());
-  queue.call('Trigger the system', function(callbacks) {
-    asynchronousSystem.triggerLater(callbacks.noop());
-  });
-  queue.call('Assert about the system', function() {
-    assertTrue(asynchronousSystem.wasTriggered());
-  });
-};
-
-
-
-var TestName = AsyncTestCase('TestName');
-
-/*
-Comment September 23 2011
-I'm running v1.3.2 of js test driver, and the documentation still doesn't correspond to
-what happens in this version.
-The object passed to an async test case has
-add,
-count,
-maybeComplete,
-onError,
-onHerdComplete,
-remove and
-setTimeout methods.
-
-Simply using the add method seems to add methods to be tested,
-but there's nothing obvious to actually run these once they've all been added.
- */
-TestName.prototype.testToRun = function(pool) {
-   expectAsserts(1);
-   var tF = pool.add(function() {
-                      assertTrue(false); //or your more realistic assert
-                  });
-
-   window.setTimeout(tF, 500); //or your async call of some kind
-};
-
-
-
-/*
-Here is the current state of these tests. Very few of them work out of the box. Oh well...
-TypeError: Object #<Object> has no method 'wasTriggered'
-
-    at [object Object].testNoop (http://localhost:9876/test/test/WoodenPuzzleTest.js:68:34)
-
-
-
-TypeError: Object [object Object] has no method 'add'
-    at [object Object].testToRun (http://localhost:9876/test/test/WoodenPuzzleTest.js:84:18)
-
-
-
-TypeError: asynchronousSystem.wasTriggered is not a function
-([object Object],null)@http://localhost:9876/test/test/WoodenPuzzleTest.js:68
-
-
-
-TypeError: pool.add is not a function
-([object Object],null)@http://localhost:9876/test/test/WoodenPuzzleTest.js:84
-
-
-*/
