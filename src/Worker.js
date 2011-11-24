@@ -6,6 +6,6 @@ myapp.Worker = function() {
 };
 
 myapp.Worker.prototype.perform = function() {
-  this.id = 2;
+  //this.id = 2;
 };
 
