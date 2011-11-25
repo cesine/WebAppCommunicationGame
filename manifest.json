@@ -2,10 +2,14 @@
   "name": "My First Extension",
   "version": "1.0",
   "description": "The first extension that I made.",
-  "browser_action": {
-    "default_icon": "icon.png",
-		"popup": "popup.html"
+  "default_locale": "en",
+  "app": {
+    "launch": {
+      "local_path": "popup.html"
+    }
   },
+  "offline_enabled": true,
+  "background_page": "background.html",
   "permissions": [
     "http://api.flickr.com/"
   ]

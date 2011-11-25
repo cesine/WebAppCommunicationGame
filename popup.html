@@ -2,7 +2,10 @@
 <head>
   <script type="text/javascript" src="view.js"/>
   <script type="text/javascript">
-    initCanvas();
+    var gamesurface
+    window.onload = window.onresize = function() {
+      gamesurface = initCanvas();
+    };
   </script>
 </head>
 <body>
