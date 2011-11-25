@@ -1,4 +1,18 @@
+/*
+The Wooden Shapes Game Board is a canvas
 
+It has a piece of wood as a background picture
+It has an array of puzzle pieces (twice as many as are needed on the board)
+
+The board has inset pictures of where the puzzle pieces are supposed to go. 
+
+The board knows where the pieces are at all times
+
+The board knows when the game is complete (all the pieces have been filled)
+
+The pieces can either be on the puzzle board or in the bin
+
+*/
 AsyncTestCase('TestPiecePositionHistory', {
   testSequenceOfActions: function(queue){
     var state = 0;
