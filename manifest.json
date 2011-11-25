@@ -2,10 +2,10 @@
   "name": "My First Extension",
   "version": "1.0",
   "description": "The first extension that I made.",
-  "default_locale": "en",
+  "default_locale": "fr",
   "app": {
     "launch": {
-      "local_path": "popup.html"
+      "local_path": "main.html"
     }
   },
   "offline_enabled": true,
