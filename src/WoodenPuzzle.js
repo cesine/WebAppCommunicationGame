@@ -1,6 +1,6 @@
 WoodenPuzzleSet = function(canvasElement){
   if(canvasElement == null){
-    this.canvas = document.body.appendChild(document.createElement("canvas"));
+    this.canvas = document.body.appendChild(document.createElement("canvas")); //TODO append at highest position
   }else{
     this.canvas = canvasElement;
   }
