@@ -13,6 +13,20 @@ The board knows when the game is complete (all the pieces have been filled)
 The pieces can either be on the puzzle board or in the bin
 
 */
+
+TestCase('TestWoodenPuzzleSet', sinon.testCase({
+  "setUp": function(){
+    puzzleSet = new WoodenPuzzleSet();
+
+  },
+  "test should be an object": function(){
+    assertObject(puzzleSet);
+    assertEquals("The id of the puzzle piece should be set",0, puzzleSet.id);
+    assertTrue( "okay" === puzzleSet.draw() );
+  }
+
+}));
+
 AsyncTestCase('TestPiecePositionHistory', {
   testSequenceOfActions: function(queue){
     var state = 0;
