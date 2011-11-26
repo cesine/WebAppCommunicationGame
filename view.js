@@ -1,6 +1,10 @@
 initCanvas = function() {
-  canvasWidth = 600;
-  canvasHeight = 400;
+
+  document.getElementById("buttonarea").removeChild(document.getElementById("loadButton"));
+  document.body.style.margin = "0px 0px 0px " + 0 + "px";
+  var canvasRatio = 1.0;//0.99
+  canvasWidth = window.innerWidth * canvasRatio;
+  canvasHeight = window.innerHeight * canvasRatio;
   gamearea = document.getElementById("gamearea_canvas");
   gamearea.setAttribute("width", canvasWidth);
   gamearea.setAttribute("height", canvasHeight);
