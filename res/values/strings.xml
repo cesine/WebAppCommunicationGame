@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, AndroidCommunicationGameActivity!</string>
     <string name="app_name">AndroidCommunicationGame</string>
-
+	<string name="user_agent_suffix">AndroidCommunicationGame/1.0</string>
+	
 </resources>

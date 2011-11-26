@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-	<html>
+<html>
 <head>
   <script type="text/javascript" charset="utf-8" src="src/jquery.js"></script>
   <script type="text/javascript" charset="utf-8" src="src/WoodenPuzzle.js"></script>
