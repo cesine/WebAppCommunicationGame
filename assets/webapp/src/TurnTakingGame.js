@@ -288,7 +288,7 @@ Alien.prototype.explode = function() {
   this.removeFromWorld = true;
   this.game.addEntity(new AlienExplosion(this.game, this.x, this.y));
   if(this.game.soundSwitch !== "off"){
-    this.game.ASSET_MANAGER.getSound('audio/alien_boom.mp3').play();
+    this.game.ASSET_MANAGER.getSound('audio/uh_oh.mp3').play();
   }
 }
 
@@ -351,7 +351,7 @@ Sentry.prototype.shoot = function() {
   var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
   this.game.addEntity(bullet);
   if(this.game.soundSwitch !== "off"){
-    this.game.ASSET_MANAGER.getSound('audio/bullet.mp3').play();
+    this.game.ASSET_MANAGER.getSound('audio/wood_block.mp3').play();
   }
 }
 
@@ -372,7 +372,7 @@ Bullet.prototype.update = function() {
     this.removeFromWorld = true;
   } else if (Math.abs(this.x) >= Math.abs(this.explodesAt.x) || Math.abs(this.y) >= Math.abs(this.explodesAt.y)) {
     if(this.game.soundSwitch !== "off"){
-      this.game.ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
+      this.game.ASSET_MANAGER.getSound('audio/cat_pur.mp3').play();
     }
     this.game.addEntity(new BulletExplosion(this.game, this.explodesAt.x, this.explodesAt.y));
     this.removeFromWorld = true;

@@ -18,12 +18,12 @@ var playWoodenPuzzle = function() {
    see console_log_output.txt for more info
    TODO turn into a UI element (button) for user to understand what is going on
    */
-  game.soundSwitch= "off";
+  game.soundSwitch= "on";
   console.log("Sound is switched " + game.soundSwitch);
   if(game.soundSwitch !== "off"){
-    game.ASSET_MANAGER.queueSound('alien-boom', 'audio/alien_boom.mp3');
-    game.ASSET_MANAGER.queueSound('bullet-boom', 'audio/bullet_boom.mp3');
-    game.ASSET_MANAGER.queueSound('bullet', 'audio/bullet.mp3');
+    game.ASSET_MANAGER.queueSound('alien-boom', 'audio/uh_oh.mp3');
+    game.ASSET_MANAGER.queueSound('bullet-boom', 'audio/cat_pur.mp3');
+    game.ASSET_MANAGER.queueSound('bullet', 'audio/wood_block.mp3');
   }
 
   game.ASSET_MANAGER.downloadAll(function() {
