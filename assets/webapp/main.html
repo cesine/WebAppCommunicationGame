@@ -1,28 +1,23 @@
 <!DOCTYPE HTML>
-<html manifest="cache.appcache">
+<html>
 <head>
   <script type="text/javascript" charset="utf-8" src="src/jquery.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/TurnTakingGame.js"></script>
+  <script type="text/javascript" charset="utf-8" src="src/AssetManager.js"></script>
   <script type="text/javascript" charset="utf-8" src="src/WoodenPuzzle.js"></script>
   <script type="text/javascript" charset="utf-8" src="src/PuzzlePiece.js"></script>
-
   <script type="text/javascript" charset="utf-8" src="view.js"></script>
 
-  
-  <script type="text/javascript">
-    var gamesurface
-    var loadGame = function() {
-      gamesurface = initCanvas();
-    };
-  </script>
+  <meta charset="utf-8">
 </head>
 <body>
 <div id="gamearea_div">
   <canvas id="gamearea_canvas" width="40" height="100">
   </canvas>
 
-<div id='buttonarea'>
-  <input type="button"  id="loadButton"  value="Load" onClick="loadGame()" />
-</div>
+  <div id='buttonarea'>
+    <input type="button"  id="loadButton"  value="Load" onClick="loadGame()" />
+  </div>
 
 </div>
 
