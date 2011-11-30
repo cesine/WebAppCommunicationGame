@@ -217,7 +217,7 @@ function Alien(game, radial_distance, angle) {
   this.radial_distance = radial_distance;
   this.angle = angle;
   this.speed = 100;
-  this.sprite = this.rotateAndCache(ASSET_MANAGER.getAsset('img/alien.png'), this.angle);
+  this.sprite = this.rotateAndCache(game.ASSET_MANAGER.getAsset('img/alien.png'), this.angle);
   this.radius = this.sprite.height/2;
   this.setCoords();
 }
@@ -257,13 +257,13 @@ Alien.prototype.explode = function() {
   this.removeFromWorld = true;
   this.game.addEntity(new AlienExplosion(this.game, this.x, this.y));
   if(this.game.soundSwitch !== "off"){
-    ASSET_MANAGER.getSound('audio/alien_boom.mp3').play();
+    this.game.ASSET_MANAGER.getSound('audio/alien_boom.mp3').play();
   }
 }
 
 function AlienExplosion(game, x, y) {
   Entity.call(this, game, x, y);
-  this.animation = new Animation(ASSET_MANAGER.getAsset('img/alien-explosion.png'), 69, 0.05);
+  this.animation = new Animation(game.ASSET_MANAGER.getAsset('img/alien-explosion.png'), 69, 0.05);
   this.radius = this.animation.frameWidth / 2;
 }
 AlienExplosion.prototype = new Entity();
@@ -284,7 +284,7 @@ AlienExplosion.prototype.draw = function(ctx) {
 function Sentry(game) {
   this.distanceFromEarthCenter = 85;
   Entity.call(this, game, 0, this.distanceFromEarthCenter);
-  this.sprite = ASSET_MANAGER.getAsset('img/sentry.png');
+  this.sprite = game.ASSET_MANAGER.getAsset('img/sentry.png');
   this.radius = this.sprite.width / 2;
   this.angle = 0;
 }
@@ -320,7 +320,7 @@ Sentry.prototype.shoot = function() {
   var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
   this.game.addEntity(bullet);
   if(this.game.soundSwitch !== "off"){
-    ASSET_MANAGER.getSound('audio/bullet.mp3').play();
+    this.game.ASSET_MANAGER.getSound('audio/bullet.mp3').play();
   }
 }
 
@@ -330,7 +330,7 @@ function Bullet(game, x, y, angle, explodesAt) {
   this.explodesAt = explodesAt;
   this.speed = 250;
   this.radial_distance = 95;
-  this.sprite = ASSET_MANAGER.getAsset('img/bullet.png');
+  this.sprite = game.ASSET_MANAGER.getAsset('img/bullet.png');
   this.animation = new Animation(this.sprite, 7, 0.05, true);
 }
 Bullet.prototype = new Entity();
@@ -341,7 +341,7 @@ Bullet.prototype.update = function() {
     this.removeFromWorld = true;
   } else if (Math.abs(this.x) >= Math.abs(this.explodesAt.x) || Math.abs(this.y) >= Math.abs(this.explodesAt.y)) {
     if(this.game.soundSwitch !== "off"){
-      ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
+      this.game.ASSET_MANAGER.getSound('audio/bullet_boom.mp3').play();
     }
     this.game.addEntity(new BulletExplosion(this.game, this.explodesAt.x, this.explodesAt.y));
     this.removeFromWorld = true;
@@ -365,7 +365,7 @@ Bullet.prototype.draw = function(ctx) {
 
 function BulletExplosion(game, x, y) {
   Entity.call(this, game, x, y);
-  this.sprite = ASSET_MANAGER.getAsset('img/explosion.png');
+  this.sprite = game.ASSET_MANAGER.getAsset('img/explosion.png');
   this.animation = new Animation(this.sprite, 34, 0.05);
   this.radius = this.animation.frameWidth / 2;
 }
@@ -409,7 +409,7 @@ BulletExplosion.prototype.draw = function(ctx) {
 
 function Earth(game) {
   Entity.call(this, game, 0, 0);
-  this.sprite = ASSET_MANAGER.getAsset('img/earth.png');
+  this.sprite = game.ASSET_MANAGER.getAsset('img/earth.png');
 }
 Earth.prototype = new Entity();
 Earth.prototype.constructor = Earth;
@@ -470,35 +470,46 @@ EvilAliens.prototype.drawScore = function() {
 }
 
 
-var canvas = document.getElementById('surface');
-canvas.setAttribute("width", window.innerWidth);
-canvas.setAttribute("height", window.innerHeight);
-var ctx = canvas.getContext('2d');
 
-var game = new EvilAliens();
 
-var ASSET_MANAGER = new AssetManager();
-ASSET_MANAGER.queueDownload('img/alien-explosion.png');
-ASSET_MANAGER.queueDownload('img/alien.png');
-ASSET_MANAGER.queueDownload('img/bullet.png');
-ASSET_MANAGER.queueDownload('img/earth.png');
-ASSET_MANAGER.queueDownload('img/sentry.png');
-ASSET_MANAGER.queueDownload('img/explosion.png');
+var playAliens = function() {
 
-/*
-Allow programmer to turn sound off (so game will still play even if Flash security permissions havent been set
-see console_log_output.txt for more info
-TODO turn into a UI element (button) for user to understand what is going on
- */
-game.soundSwitch= "off";
-console.log("Sound is switched " + game.soundSwitch);
-if(game.soundSwitch !== "off"){
-  ASSET_MANAGER.queueSound('alien-boom', 'audio/alien_boom.mp3');
-  ASSET_MANAGER.queueSound('bullet-boom', 'audio/bullet_boom.mp3');
-  ASSET_MANAGER.queueSound('bullet', 'audio/bullet.mp3');
-}
 
-ASSET_MANAGER.downloadAll(function() {
-  game.init(ctx);
-  game.start();
-});
+  var game = new EvilAliens();
+  
+  game.canvas = document.getElementById('surface');
+  game.canvas.setAttribute("width", window.innerWidth);
+  game.canvas.setAttribute("height", window.innerHeight);
+  game.ctx = game.canvas.getContext('2d');
+
+
+  game.ASSET_MANAGER = new AssetManager();
+  game.ASSET_MANAGER.queueDownload('img/alien-explosion.png');
+  game.ASSET_MANAGER.queueDownload('img/alien.png');
+  game.ASSET_MANAGER.queueDownload('img/bullet.png');
+  game.ASSET_MANAGER.queueDownload('img/earth.png');
+  game.ASSET_MANAGER.queueDownload('img/sentry.png');
+  game.ASSET_MANAGER.queueDownload('img/explosion.png');
+
+  /*
+   Allow programmer to turn sound off (so game will still play even if Flash security permissions havent been set
+   see console_log_output.txt for more info
+   TODO turn into a UI element (button) for user to understand what is going on
+   */
+  game.soundSwitch= "off";
+  console.log("Sound is switched " + game.soundSwitch);
+  if(game.soundSwitch !== "off"){
+    game.ASSET_MANAGER.queueSound('alien-boom', 'audio/alien_boom.mp3');
+    game.ASSET_MANAGER.queueSound('bullet-boom', 'audio/bullet_boom.mp3');
+    game.ASSET_MANAGER.queueSound('bullet', 'audio/bullet.mp3');
+  }
+
+  game.ASSET_MANAGER.downloadAll(function() {
+    game.init(game.ctx);
+    game.start();
+  });
+
+  return game;
+
+
+};
