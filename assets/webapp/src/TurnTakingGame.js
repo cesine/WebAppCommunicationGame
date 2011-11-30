@@ -111,6 +111,11 @@ GameEngine.prototype.start = function() {
     requestAnimFrame(gameLoop, that.ctx.canvas);
   })();
 }
+GameEngine.prototype.pauseGame = function(){
+  this.pause = true;
+  alert("Game Paused");
+}
+
 
 GameEngine.prototype.startInput = function() {
   console.log('Starting input');
@@ -446,100 +451,3 @@ Earth.prototype.draw = function(ctx) {
   ctx.drawImage(this.sprite, this.x - this.sprite.width/2, this.y - this.sprite.height/2);
 }
 
-function EvilAliens() {
-  GameEngine.call(this);
-  //this.showOutlines = true;
-  this.lives = 10;
-  this.score = 0;
-}
-EvilAliens.prototype = new GameEngine();
-EvilAliens.prototype.constructor = EvilAliens;
-
-EvilAliens.prototype.start = function() {
-  this.sentry = new Sentry(this);
-  this.earth = new Earth(this);
-  this.addEntity(this.earth);
-  this.addEntity(this.sentry);
-  this.addPlayer(new Player(this, "192.168.0.112"))
-  GameEngine.prototype.start.call(this);
-}
-
-EvilAliens.prototype.update = function() {
-  if (this.lastAlienAddedAt == null || (this.timer.gameTime - this.lastAlienAddedAt) > 1) {
-    this.addEntity(new Alien(this, this.ctx.canvas.width, Math.random() * Math.PI * 180));
-    this.lastAlienAddedAt = this.timer.gameTime;
-  }
-
-  if (this.score <= 0) {
-    // show game over screen
-  }
-
-  GameEngine.prototype.update.call(this);
-}
-
-EvilAliens.prototype.draw = function() {
-  GameEngine.prototype.draw.call(this, function(game) {
-    game.drawScore();
-    game.drawLives();
-  });
-}
-
-EvilAliens.prototype.drawLives = function() {
-  this.ctx.fillStyle = "red";
-  this.ctx.font = "bold 2em Arial";
-  this.ctx.fillText("Lives: " + this.lives, -this.ctx.canvas.width/2 + 50, this.ctx.canvas.height/2 - 80);
-}
-
-EvilAliens.prototype.drawScore = function() {
-  this.ctx.fillStyle = "red";
-  this.ctx.font = "bold 2em Arial";
-  this.ctx.fillText("Score: " + this.score, -this.ctx.canvas.width/2 + 50, this.ctx.canvas.height/2 - 50);
-}
-
-EvilAliens.prototype.pauseGame = function(){
-  this.pause = true;
-  alert("Game Paused");
-}
-
-
-var playAliens = function() {
-
-
-  var game = new EvilAliens();
-
-  game.canvas = document.getElementById('surface');
-  game.canvas.setAttribute("width", window.innerWidth);
-  game.canvas.setAttribute("height", window.innerHeight);
-  game.ctx = game.canvas.getContext('2d');
-
-
-  game.ASSET_MANAGER = new AssetManager();
-  game.ASSET_MANAGER.queueDownload('img/alien-explosion.png');
-  game.ASSET_MANAGER.queueDownload('img/alien.png');
-  game.ASSET_MANAGER.queueDownload('img/bullet.png');
-  game.ASSET_MANAGER.queueDownload('img/earth.png');
-  game.ASSET_MANAGER.queueDownload('img/sentry.png');
-  game.ASSET_MANAGER.queueDownload('img/explosion.png');
-
-  /*
-   Allow programmer to turn sound off (so game will still play even if Flash security permissions havent been set
-   see console_log_output.txt for more info
-   TODO turn into a UI element (button) for user to understand what is going on
-   */
-  game.soundSwitch= "off";
-  console.log("Sound is switched " + game.soundSwitch);
-  if(game.soundSwitch !== "off"){
-    game.ASSET_MANAGER.queueSound('alien-boom', 'audio/alien_boom.mp3');
-    game.ASSET_MANAGER.queueSound('bullet-boom', 'audio/bullet_boom.mp3');
-    game.ASSET_MANAGER.queueSound('bullet', 'audio/bullet.mp3');
-  }
-
-  game.ASSET_MANAGER.downloadAll(function() {
-    game.init(game.ctx);
-    game.start();
-  });
-
-  return game;
-
-
-};
