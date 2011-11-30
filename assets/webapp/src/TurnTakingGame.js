@@ -1,3 +1,7 @@
+//http://www.freesound.org/
+//http://www.lostgarden.com/
+
+
 //future proofing
 window.requestAnimFrame = (function(){
   return window.requestAnimationFrame ||
@@ -35,7 +39,7 @@ GameEngine.prototype.loop = function(){
   this.lastUpdateTimestamp = now;
 }
 
-Gameengine.prototype.start = function(){
+GameEngine.prototype.start = function(){
   console.log("starting game");
   this.lastUpdateTimestamp = Date.now();
   var that = this;
@@ -47,12 +51,12 @@ Gameengine.prototype.start = function(){
 
 GameEngine.prototype.startInput = function(){
   //...
-  this.ctx.canvas.addEventListner("click",function(e){
-    that.click = getXandY(e);
-  }), false);
-  this.ctx.canvas.addEventListner("mousemove", function(e){
-    that.mouse = getXandY(e);
-  }), false);
+//  this.ctx.canvas.addEventListner("click",function(e){
+//    that.click = getXandY(e);
+//  }), false);
+//  this.ctx.canvas.addEventListner("mousemove", function(e){
+//    that.mouse = getXandY(e);
+//  }), false);
 }
 
 /*

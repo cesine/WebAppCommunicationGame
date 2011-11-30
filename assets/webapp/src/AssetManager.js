@@ -25,7 +25,7 @@ AssetManager.prototype.downloadAll = function(callback){
     });
     img.addEventListener("error", function() {
       that.errorCount += 1;
-      if (that.siDone()) {callback(); }
+      if (that.isDone()) {callback(); }
     });
     //set the src after the event listeners so they will be called if it loads quickly
     img.src = path;

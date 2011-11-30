@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html manifest="./cache.appcache">
 <head>
   <script type="text/javascript" charset="utf-8" src="src/jquery.js"></script>
   <script type="text/javascript" charset="utf-8" src="src/TurnTakingGame.js"></script>
@@ -8,9 +8,14 @@
   <script type="text/javascript" charset="utf-8" src="src/PuzzlePiece.js"></script>
   <script type="text/javascript" charset="utf-8" src="view.js"></script>
 
+
+
   <meta charset="utf-8">
 </head>
 <body>
+<canvas id="surface" width="1024" height="768" style="border: 1px solid red; background: black"></canvas>
+        
+
 <div id="gamearea_div">
   <canvas id="gamearea_canvas" width="40" height="100">
   </canvas>
@@ -20,6 +25,9 @@
   </div>
 
 </div>
+
+<script type="text/javascript" src="src/soundmanager2-jsmin.js"></script>
+   <script type="text/javascript" src="src/app.js"></script>
 
 </body>
 </html>

@@ -6,8 +6,8 @@ gp.game3;
 gp.game4;
 gp.ASSET_MANAGER = new AssetManager();
 
-gp.ASSET_MANAGER.queueDownload('imags/wood_golden.jpg');
-gp.ASSET_MANAGER.queueDownload('imags/canard.jpg');
+gp.ASSET_MANAGER.queueDownload('images/wood_golden.jpg');
+gp.ASSET_MANAGER.queueDownload('images/canard.png');
 
 gp.ASSET_MANAGER.downloadAll(function() {
   var sprite = gp.ASSET_MANAGER.getAsset('images/wood_golden.jpg');
