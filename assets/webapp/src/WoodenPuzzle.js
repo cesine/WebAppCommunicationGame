@@ -2,17 +2,19 @@
 function WoodenPuzzleSet() {
   GameEngine.call(this);
   //this.showOutlines = true;
-  this.lives = 10;
   this.score = 0;
 }
 WoodenPuzzleSet.prototype = new GameEngine();
 WoodenPuzzleSet.prototype.constructor = WoodenPuzzleSet;
 
 WoodenPuzzleSet.prototype.start = function() {
-  this.sentry = new Sentry(this);
-  this.earth = new Earth(this);
-  this.addEntity(this.earth);
-  this.addEntity(this.sentry);
+//  for(var j =0; j < gameset.pieces.length; j++){
+//    this.addEntity(gameset.pieces[j]);
+//
+//  }
+  //sentry will become slide
+  this.tray = new Tray(this);
+  this.addEntity(this.tray);
   this.addPlayer(new Player(this, "192.168.0.112"))
   GameEngine.prototype.start.call(this);
 }
@@ -33,15 +35,10 @@ WoodenPuzzleSet.prototype.update = function() {
 WoodenPuzzleSet.prototype.draw = function() {
   GameEngine.prototype.draw.call(this, function(game) {
     game.drawScore();
-    game.drawLives();
+
   });
 }
 
-WoodenPuzzleSet.prototype.drawLives = function() {
-  this.ctx.fillStyle = "red";
-  this.ctx.font = "bold 2em Arial";
-  this.ctx.fillText("Lives: " + this.lives, -this.ctx.canvas.width/2 + 50, this.ctx.canvas.height/2 - 80);
-}
 
 WoodenPuzzleSet.prototype.drawScore = function() {
   this.ctx.fillStyle = "red";

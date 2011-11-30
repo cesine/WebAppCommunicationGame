@@ -18,7 +18,7 @@ var playWoodenPuzzle = function() {
    see console_log_output.txt for more info
    TODO turn into a UI element (button) for user to understand what is going on
    */
-  game.soundSwitch= "on";
+  game.soundSwitch= "off";
   console.log("Sound is switched " + game.soundSwitch);
   if(game.soundSwitch !== "off"){
     game.ASSET_MANAGER.queueSound('alien-boom', 'audio/uh_oh.mp3');

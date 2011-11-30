@@ -248,7 +248,7 @@ function Alien(game, radial_distance, angle) {
   this.radial_distance = radial_distance;
   this.angle = angle;
   this.speed = 100;
-  this.sprite = this.rotateAndCache(game.ASSET_MANAGER.getAsset('img/alien.png'), this.angle);
+  this.sprite = this.rotateAndCache(game.ASSET_MANAGER.getAsset('images/nonpublic_canard_rouge.png'), this.angle);
   this.radius = this.sprite.height/2;
   this.setCoords();
 }
@@ -274,7 +274,7 @@ Alien.prototype.update = function() {
 
 Alien.prototype.hitPlanet = function() {
   var distance_squared = ((this.x * this.x) + (this.y * this.y));
-  var radii_squared = (this.radius + Earth.RADIUS) * (this.radius + Earth.RADIUS);
+  var radii_squared = (this.radius + 30) * (this.radius + 30);
   return distance_squared < radii_squared;
 }
 
@@ -312,17 +312,17 @@ AlienExplosion.prototype.draw = function(ctx) {
   this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
 }
 
-function Sentry(game) {
+function Tray(game) {
   this.distanceFromEarthCenter = 85;
   Entity.call(this, game, 0, this.distanceFromEarthCenter);
-  this.sprite = game.ASSET_MANAGER.getAsset('img/sentry.png');
+  this.sprite = game.ASSET_MANAGER.getAsset('images/nonpublic_twisty_slide.png');
   this.radius = this.sprite.width / 2;
   this.angle = 0;
 }
-Sentry.prototype = new Entity();
-Sentry.prototype.constructor = Sentry;
+Tray.prototype = new Entity();
+Tray.prototype.constructor = Tray;
 
-Sentry.prototype.update = function() {
+Tray.prototype.update = function() {
   if (this.game.mouse) {
     this.angle = Math.atan2(this.game.mouse.y, this.game.mouse.x);
     if (this.angle < 0) {
@@ -337,7 +337,7 @@ Sentry.prototype.update = function() {
   Entity.prototype.update.call(this);
 }
 
-Sentry.prototype.draw = function(ctx) {
+Tray.prototype.draw = function(ctx) {
   ctx.save();
   ctx.translate(this.x, this.y);
   ctx.rotate(this.angle + Math.PI/2);
@@ -347,107 +347,13 @@ Sentry.prototype.draw = function(ctx) {
   Entity.prototype.draw.call(this, ctx);
 }
 
-Sentry.prototype.shoot = function() {
-  var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
-  this.game.addEntity(bullet);
+Tray.prototype.shoot = function() {
+//  var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
+//  this.game.addEntity(bullet);
   if(this.game.soundSwitch !== "off"){
     this.game.ASSET_MANAGER.getSound('audio/wood_block.mp3').play();
   }
 }
 
-function Bullet(game, x, y, angle, explodesAt) {
-  Entity.call(this, game, x, y);
-  this.angle = angle;
-  this.explodesAt = explodesAt;
-  this.speed = 250;
-  this.radial_distance = 95;
-  this.sprite = game.ASSET_MANAGER.getAsset('img/bullet.png');
-  this.animation = new Animation(this.sprite, 7, 0.05, true);
-}
-Bullet.prototype = new Entity();
-Bullet.prototype.constructor = Bullet;
 
-Bullet.prototype.update = function() {
-  if (this.outsideScreen()) {
-    this.removeFromWorld = true;
-  } else if (Math.abs(this.x) >= Math.abs(this.explodesAt.x) || Math.abs(this.y) >= Math.abs(this.explodesAt.y)) {
-    if(this.game.soundSwitch !== "off"){
-      this.game.ASSET_MANAGER.getSound('audio/cat_pur.mp3').play();
-    }
-    this.game.addEntity(new BulletExplosion(this.game, this.explodesAt.x, this.explodesAt.y));
-    this.removeFromWorld = true;
-  } else {
-    this.x = this.radial_distance * Math.cos(this.angle);
-    this.y = this.radial_distance * Math.sin(this.angle);
-    this.radial_distance += this.speed * this.game.clockTick;
-  }
-}
-
-Bullet.prototype.draw = function(ctx) {
-  ctx.save();
-  ctx.translate(this.x, this.y);
-  ctx.rotate(this.angle + Math.PI/2);
-  ctx.translate(-this.x, -this.y);
-  this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-  ctx.restore();
-
-  Entity.prototype.draw.call(this, ctx);
-}
-
-function BulletExplosion(game, x, y) {
-  Entity.call(this, game, x, y);
-  this.sprite = game.ASSET_MANAGER.getAsset('img/explosion.png');
-  this.animation = new Animation(this.sprite, 34, 0.05);
-  this.radius = this.animation.frameWidth / 2;
-}
-BulletExplosion.prototype = new Entity();
-BulletExplosion.prototype.constructor = BulletExplosion;
-
-BulletExplosion.prototype.update = function() {
-  Entity.prototype.update.call(this);
-
-  if (this.animation.isDone()) {
-    this.removeFromWorld = true;
-    return;
-  }
-
-  this.radius = (this.animation.frameWidth/2) * this.scaleFactor();
-
-  for (var i = 0; i < this.game.entities.length; i++) {
-    var alien = this.game.entities[i];
-    if (alien instanceof Alien && this.isCaughtInExplosion(alien)) {
-      this.game.score += 10;
-      alien.explode();
-    }
-  }
-}
-
-BulletExplosion.prototype.isCaughtInExplosion = function(alien) {
-  var distance_squared = (((this.x - alien.x) * (this.x - alien.x)) + ((this.y - alien.y) * (this.y - alien.y)));
-  var radii_squared = (this.radius + alien.radius) * (this.radius + alien.radius);
-  return distance_squared < radii_squared;
-}
-
-BulletExplosion.prototype.scaleFactor = function() {
-  return 1 + (this.animation.currentFrame() / 3);
-}
-
-BulletExplosion.prototype.draw = function(ctx) {
-  this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scaleFactor());
-
-  Entity.prototype.draw.call(this, ctx);
-}
-
-function Earth(game) {
-  Entity.call(this, game, 0, 0);
-  this.sprite = game.ASSET_MANAGER.getAsset('img/earth.png');
-}
-Earth.prototype = new Entity();
-Earth.prototype.constructor = Earth;
-
-Earth.RADIUS = 67;
-
-Earth.prototype.draw = function(ctx) {
-  ctx.drawImage(this.sprite, this.x - this.sprite.width/2, this.y - this.sprite.height/2);
-}
 
