@@ -469,7 +469,10 @@ EvilAliens.prototype.drawScore = function() {
   this.ctx.fillText("Score: " + this.score, -this.ctx.canvas.width/2 + 50, this.ctx.canvas.height/2 - 50);
 }
 
-
+EvilAliens.prototype.pauseGame = function(){
+  this.pause = true;
+  alert("Game Paused");
+}
 
 
 var playAliens = function() {
