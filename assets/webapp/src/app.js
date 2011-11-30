@@ -471,7 +471,10 @@ EvilAliens.prototype.drawScore = function() {
 
 
 var canvas = document.getElementById('surface');
+canvas.setAttribute("width", window.innerWidth);
+canvas.setAttribute("height", window.innerHeight);
 var ctx = canvas.getContext('2d');
+
 var game = new EvilAliens();
 
 var ASSET_MANAGER = new AssetManager();
