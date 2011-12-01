@@ -22,6 +22,22 @@ Tray.prototype.constructor = Tray;
 //GameBackground.prototype.constructor = GameBackground;
 
 
+function PuzzlePiece(game, sprit, x , y, ratio){
+    this.x = x * game.canvas.width;
+    this.y = y * game.canvas.height;
+    Entity.call(this, game, this.x, this.y);
+    this.ratio = ratio;
+    this.correctX = 0;
+    this.correctY = 0;
+    this.angle = 0;
+
+    this.sprite = sprit;
+}
+PuzzlePiece.prototype = new Entity();
+PuzzlePiece.prototype.constructor = PuzzlePiece;
+
+
+
 
 
 function WoodenPuzzleSet() {
@@ -44,7 +60,14 @@ WoodenPuzzleSet.prototype.start = function() {
   this.tray = new Tray(this);
   this.addEntity(this.tray);
   this.addPlayer(new Player(this, "192.168.0.112"))
-    
+
+  var pieces4 = gameset.pieces4;
+  for (var j = 0; j < pieces4.length; j++){
+    //var sprite = this.ASSET_MANAGER.queueDownload(pieces4[j]);
+    //var apiece = new PuzzlePiece(this, sprite);
+    this.addEntity(new PuzzlePiece(this, this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, pieces4[j].ratio ) );
+  }
+
   GameEngine.prototype.start.call(this);
 }
 
