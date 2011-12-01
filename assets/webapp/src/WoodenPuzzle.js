@@ -38,9 +38,9 @@ function PuzzlePiece(game, sprit, x , y, ratio){
   this.dragability.addEventListener("mousedown", function(){
     var mousePos = game.stage.getMousePos();
     this.dragability.moveToTop();
-    offsetX = mousePos.x - this.dragability.x;
-    offsetY = mousePos.y - this.dragability.y;
-    imgDragging = this.dragability;
+    this.offsetX = mousePos.x - this.dragability.x;
+    this.offsetY = mousePos.y - this.dragability.y;
+    this.imgDragging = this.dragability;
   });
   this.dragability.addEventListener("mouseover", function(){
     document.body.style.cursor = "pointer";

@@ -100,10 +100,25 @@ GameEngine.prototype.init = function(ctx) {
   this.halfSurfaceHeight = this.surfaceHeight/2;
 
   this.stage = new Kinetic.Stage("container", this.surfaceWidth, this.surfaceHeight);
+  this.canvas = this.stage.canvas;
+  this.ctx = this.stage.context;
   this.container = this.stage.getContainer();
   this.offsetX = 0;
   this.offsetY = 0;
   this.imgDragging = undefined;
+  this.container.addEventListener("mouseup", function(){
+    this.imgDragging = undefined;
+  }, false);
+
+  this.container.addEventListener("mousemove", function(){
+    if (this.imgDragging) {
+      var mousePos = this.stage.getMousePos();
+      this.imgDragging.x = mousePos.x - this.offsetX;
+      this.imgDragging.y = mousePos.y - this.offsetY;
+      this.imgDragging.draw();
+    }
+  }, false);
+
 
   this.startInput();
   //document.body.appendChild(this.stats.domElement);
