@@ -84,6 +84,7 @@ function GameEngine() {
   this.click = null;
   this.mouse = null;
   this.timer = new Timer();
+  this.wait = false;
   //this.stats = new Stats();
   this.surfaceWidth = null;
   this.surfaceHeight = null;
@@ -97,6 +98,13 @@ GameEngine.prototype.init = function(ctx) {
   this.surfaceHeight = this.ctx.canvas.height;
   this.halfSurfaceWidth = this.surfaceWidth/2;
   this.halfSurfaceHeight = this.surfaceHeight/2;
+
+  this.stage = new Kinetic.Stage("container", this.surfaceWidth, this.surfaceHeight);
+  this.container = this.stage.getContainer();
+  this.offsetX = 0;
+  this.offsetY = 0;
+  this.imgDragging = undefined;
+
   this.startInput();
   //document.body.appendChild(this.stats.domElement);
 
@@ -106,9 +114,14 @@ GameEngine.prototype.init = function(ctx) {
 GameEngine.prototype.start = function() {
   console.log("starting game");
   var that = this;
+
   (function gameLoop() {
-    that.loop();
-    requestAnimFrame(gameLoop, that.ctx.canvas);
+    if(this.wait !== true){
+      that.loop();
+      requestAnimFrame(gameLoop, that.ctx.canvas);
+      this.wait  = true;
+
+    }
   })();
 }
 GameEngine.prototype.pauseGame = function(){
@@ -199,6 +212,7 @@ function Entity(game, x, y) {
   this.x = x;
   this.y = y;
   this.ratio = 0.5;
+  //this.sprite = game.ASSET_MANAGER.getAsset("images/nonpublic_cheval_bleu.png");
   this.removeFromWorld = false;
 }
 
@@ -207,6 +221,8 @@ Entity.prototype.update = function() {
 }
 
 Entity.prototype.draw = function(ctx) {
+//  var imgFunc = Kinetic.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
+//  var darthVaderImg = new Kinetic.Shape(imgFunc);
   ctx.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
 
   if (this.game.showOutlines && this.radius) {
