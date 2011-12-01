@@ -106,10 +106,10 @@ GameEngine.prototype.init = function(ctx) {
 GameEngine.prototype.start = function() {
   console.log("starting game");
   var that = this;
-//  (function gameLoop() {
+  (function gameLoop() {
     that.loop();
     requestAnimFrame(gameLoop, that.ctx.canvas);
-//  })();
+  })();
 }
 GameEngine.prototype.pauseGame = function(){
   this.pause = true;

@@ -11,7 +11,15 @@ Tray.prototype = new Entity();
 Tray.prototype.constructor = Tray;
 
 
-
+//function GameBackground(game) {
+//  this.x = 0;
+//  this.y = 0;
+//  Entity.call(this, game, this.x, this.y);
+//  this.sprite = game.ASSET_MANAGER.getAsset('images/wood_golden.jpg');
+//
+//}
+//GameBackground().prototype = new Entity();
+//GameBackground.prototype.constructor = GameBackground;
 
 
 
@@ -30,9 +38,13 @@ WoodenPuzzleSet.prototype.start = function() {
 //
 //  }
   //sentry will become slide
+
+//  this.background = new GameBackground(this);
+//  this.addEntity(this.background);
   this.tray = new Tray(this);
   this.addEntity(this.tray);
   this.addPlayer(new Player(this, "192.168.0.112"))
+    
   GameEngine.prototype.start.call(this);
 }
 
