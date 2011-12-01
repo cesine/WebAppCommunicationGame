@@ -23,15 +23,35 @@ Tray.prototype.constructor = Tray;
 
 
 function PuzzlePiece(game, sprit, x , y, ratio){
-    this.x = x * game.canvas.width;
-    this.y = y * game.canvas.height;
-    Entity.call(this, game, this.x, this.y);
-    this.ratio = ratio;
-    this.correctX = 0;
-    this.correctY = 0;
-    this.angle = 0;
+  this.sprite = sprit;
+  this.x = x * game.canvas.width;
+  this.y = y * game.canvas.height;
+  Entity.call(this, game, this.x, this.y);
 
-    this.sprite = sprit;
+  this.ratio = ratio;
+  this.correctX = 0;
+  this.correctY = 0;
+  this.angle = 0;
+  this.imgFunc = Kinetic.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
+  this.dragability = new Kinetic.Shape(this.imgFunc);
+
+  this.dragability.addEventListener("mousedown", function(){
+    var mousePos = game.stage.getMousePos();
+    this.dragability.moveToTop();
+    offsetX = mousePos.x - this.dragability.x;
+    offsetY = mousePos.y - this.dragability.y;
+    imgDragging = this.dragability;
+  });
+  this.dragability.addEventListener("mouseover", function(){
+    document.body.style.cursor = "pointer";
+  });
+  this.dragability.addEventListener("mouseout", function(){
+    document.body.style.cursor = "default";
+  });
+  game.stage.add(this.dragability);
+
+
+
 }
 PuzzlePiece.prototype = new Entity();
 PuzzlePiece.prototype.constructor = PuzzlePiece;
@@ -92,5 +112,5 @@ WoodenPuzzleSet.prototype.draw = function() {
 WoodenPuzzleSet.prototype.drawScore = function() {
   this.ctx.fillStyle = "red";
   this.ctx.font = "bold 2em Arial";
-  this.ctx.fillText("Score: " + this.score, -this.ctx.canvas.width/2 + 50, this.ctx.canvas.height/2 - 50);
+  this.ctx.fillText("Score: " + this.score, -this.surfaceWidth/2 + 50, this.surfaceHeight/2 - 50);
 }

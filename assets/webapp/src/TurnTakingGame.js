@@ -212,8 +212,13 @@ function Entity(game, x, y) {
   this.x = x;
   this.y = y;
   this.ratio = 0.5;
+  
   //this.sprite = game.ASSET_MANAGER.getAsset("images/nonpublic_cheval_bleu.png");
   this.removeFromWorld = false;
+
+
+
+
 }
 
 Entity.prototype.update = function() {
@@ -221,10 +226,9 @@ Entity.prototype.update = function() {
 }
 
 Entity.prototype.draw = function(ctx) {
-//  var imgFunc = Kinetic.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
-//  var darthVaderImg = new Kinetic.Shape(imgFunc);
   ctx.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
 
+  
   if (this.game.showOutlines && this.radius) {
     ctx.beginPath();
     ctx.strokeStyle = "green";
