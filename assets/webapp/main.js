@@ -1,10 +1,13 @@
+document.getElementById("buttonarea").removeChild(document.getElementById("loadButton"));
+document.body.style.margin = "0px 0px 0px " + 0 + "px";
+
 
 var playWoodenPuzzle = function() {
   var game = new WoodenPuzzleSet();
 
   game.canvas = document.getElementById('surface');
-  game.canvas.setAttribute("width", window.innerWidth);
-  game.canvas.setAttribute("height", window.innerHeight);
+  game.canvas.setAttribute("width", window.innerWidth*0.99);
+  game.canvas.setAttribute("height", window.innerHeight*.99);
   game.ctx = game.canvas.getContext('2d');
 
 

@@ -106,10 +106,10 @@ GameEngine.prototype.init = function(ctx) {
 GameEngine.prototype.start = function() {
   console.log("starting game");
   var that = this;
-  (function gameLoop() {
+//  (function gameLoop() {
     that.loop();
     requestAnimFrame(gameLoop, that.ctx.canvas);
-  })();
+//  })();
 }
 GameEngine.prototype.pauseGame = function(){
   this.pause = true;
@@ -149,7 +149,6 @@ GameEngine.prototype.addPlayer = function(player){
 GameEngine.prototype.draw = function(drawCallback) {
   this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
   this.ctx.save();
-  this.ctx.translate(this.ctx.canvas.width/2, this.ctx.canvas.height/2);
   for (var i = 0; i < this.entities.length; i++) {
     this.entities[i].draw(this.ctx);
   }
@@ -199,13 +198,17 @@ function Entity(game, x, y) {
   this.game = game;
   this.x = x;
   this.y = y;
+  this.ratio = 0.5;
   this.removeFromWorld = false;
 }
 
 Entity.prototype.update = function() {
+
 }
 
 Entity.prototype.draw = function(ctx) {
+  ctx.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
+
   if (this.game.showOutlines && this.radius) {
     ctx.beginPath();
     ctx.strokeStyle = "green";
@@ -214,146 +217,5 @@ Entity.prototype.draw = function(ctx) {
     ctx.closePath();
   }
 }
-
-Entity.prototype.drawSpriteCentered = function(ctx) {
-  var x = this.x - this.sprite.width/2;
-  var y = this.y - this.sprite.height/2;
-  ctx.drawImage(this.sprite, x, y);
-}
-
-Entity.prototype.outsideScreen = function() {
-  return (this.x > this.game.halfSurfaceWidth || this.x < -(this.game.halfSurfaceWidth) ||
-          this.y > this.game.halfSurfaceHeight || this.y < -(this.game.halfSurfaceHeight));
-}
-
-Entity.prototype.rotateAndCache = function(image, angle) {
-  var offscreenCanvas = document.createElement('canvas');
-  var size = Math.max(image.width, image.height);
-  offscreenCanvas.width = size;
-  offscreenCanvas.height = size;
-  var offscreenCtx = offscreenCanvas.getContext('2d');
-  offscreenCtx.save();
-  offscreenCtx.translate(size/2, size/2);
-  offscreenCtx.rotate(angle + Math.PI/2);
-  offscreenCtx.translate(0,0);
-  offscreenCtx.drawImage(image, -(image.width/2), -(image.height/2));
-  offscreenCtx.restore();
-  //offscreenCtx.strokeStyle = "red";
-  //offscreenCtx.strokeRect(0,0,size,size);
-  return offscreenCanvas;
-}
-
-function Alien(game, radial_distance, angle) {
-  Entity.call(this, game);
-  this.radial_distance = radial_distance;
-  this.angle = angle;
-  this.speed = 100;
-  this.sprite = this.rotateAndCache(game.ASSET_MANAGER.getAsset('images/nonpublic_canard_rouge.png'), this.angle);
-  this.radius = this.sprite.height/2;
-  this.setCoords();
-}
-Alien.prototype = new Entity();
-Alien.prototype.constructor = Alien;
-
-Alien.prototype.setCoords = function() {
-  this.x = this.radial_distance * Math.cos(this.angle);
-  this.y = this.radial_distance * Math.sin(this.angle);
-}
-
-Alien.prototype.update = function() {
-  this.setCoords();
-  this.radial_distance -= this.speed * this.game.clockTick;
-
-  if (this.hitPlanet()) {
-    this.removeFromWorld = true;
-    this.game.lives -= 1;
-  }
-
-  Entity.prototype.update.call(this);
-}
-
-Alien.prototype.hitPlanet = function() {
-  var distance_squared = ((this.x * this.x) + (this.y * this.y));
-  var radii_squared = (this.radius + 30) * (this.radius + 30);
-  return distance_squared < radii_squared;
-}
-
-Alien.prototype.draw = function(ctx) {
-  this.drawSpriteCentered(ctx);
-
-  Entity.prototype.draw.call(this, ctx);
-}
-
-Alien.prototype.explode = function() {
-  this.removeFromWorld = true;
-  this.game.addEntity(new AlienExplosion(this.game, this.x, this.y));
-  if(this.game.soundSwitch !== "off"){
-    this.game.ASSET_MANAGER.getSound('audio/uh_oh.mp3').play();
-  }
-}
-
-function AlienExplosion(game, x, y) {
-  Entity.call(this, game, x, y);
-  this.animation = new Animation(game.ASSET_MANAGER.getAsset('img/alien-explosion.png'), 69, 0.05);
-  this.radius = this.animation.frameWidth / 2;
-}
-AlienExplosion.prototype = new Entity();
-AlienExplosion.prototype.constructor = AlienExplosion;
-
-AlienExplosion.prototype.update = function() {
-  Entity.prototype.update.call(this);
-  if (this.animation.isDone()) {
-    this.removeFromWorld = true;
-  }
-}
-
-AlienExplosion.prototype.draw = function(ctx) {
-  Entity.prototype.draw.call(this, ctx);
-  this.animation.drawFrame(this.game.clockTick, ctx, this.x, this.y);
-}
-
-function Tray(game) {
-  this.distanceFromEarthCenter = 85;
-  Entity.call(this, game, 0, this.distanceFromEarthCenter);
-  this.sprite = game.ASSET_MANAGER.getAsset('images/nonpublic_twisty_slide.png');
-  this.radius = this.sprite.width / 2;
-  this.angle = 0;
-}
-Tray.prototype = new Entity();
-Tray.prototype.constructor = Tray;
-
-Tray.prototype.update = function() {
-  if (this.game.mouse) {
-    this.angle = Math.atan2(this.game.mouse.y, this.game.mouse.x);
-    if (this.angle < 0) {
-      this.angle += Math.PI * 2;
-    }
-    this.x = (Math.cos(this.angle) * this.distanceFromEarthCenter);
-    this.y = (Math.sin(this.angle) * this.distanceFromEarthCenter);
-  }
-  if (this.game.click) {
-    this.shoot();
-  }
-  Entity.prototype.update.call(this);
-}
-
-Tray.prototype.draw = function(ctx) {
-  ctx.save();
-  ctx.translate(this.x, this.y);
-  ctx.rotate(this.angle + Math.PI/2);
-  ctx.drawImage(this.sprite, -this.sprite.width/2, -this.sprite.height/2);
-  ctx.restore();
-
-  Entity.prototype.draw.call(this, ctx);
-}
-
-Tray.prototype.shoot = function() {
-//  var bullet = new Bullet(this.game, this.x, this.y, this.angle, this.game.click);
-//  this.game.addEntity(bullet);
-  if(this.game.soundSwitch !== "off"){
-    this.game.ASSET_MANAGER.getSound('audio/wood_block.mp3').play();
-  }
-}
-
 
 

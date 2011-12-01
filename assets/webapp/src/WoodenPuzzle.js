@@ -1,3 +1,20 @@
+function Tray(game) {
+  this.x = game.canvas.width * 0.75;
+  this.y = 0;
+  Entity.call(this, game, this.x, this.y);
+  //this.ratio = 0.3;
+  this.sprite = game.ASSET_MANAGER.getAsset('images/nonpublic_twisty_slide.png');
+  this.ratio = game.canvas.height / this.sprite.height;
+  this.x = game.canvas.width -this.sprite.width * this.ratio;
+}
+Tray.prototype = new Entity();
+Tray.prototype.constructor = Tray;
+
+
+
+
+
+
 
 function WoodenPuzzleSet() {
   GameEngine.call(this);
@@ -20,10 +37,7 @@ WoodenPuzzleSet.prototype.start = function() {
 }
 
 WoodenPuzzleSet.prototype.update = function() {
-  if (this.lastAlienAddedAt == null || (this.timer.gameTime - this.lastAlienAddedAt) > 1) {
-    this.addEntity(new Alien(this, this.ctx.canvas.width, Math.random() * Math.PI * 180));
-    this.lastAlienAddedAt = this.timer.gameTime;
-  }
+
 
   if (this.score <= 0) {
     // show game over screen
