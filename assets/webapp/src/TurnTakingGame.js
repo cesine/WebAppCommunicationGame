@@ -78,9 +78,7 @@ Timer.prototype.tick = function() {
 }
 
 function GameEngine() {
-  this.entities = [];
   this.players = [];
-  this.ctx = null;
   this.click = null;
   this.mouse = null;
   this.timer = new Timer();
@@ -88,21 +86,17 @@ function GameEngine() {
   //this.stats = new Stats();
   this.surfaceWidth = null;
   this.surfaceHeight = null;
-  this.halfSurfaceWidth = null;
-  this.halfSurfaceHeight = null;
+
 }
+//http://www.html5canvastutorials.com/labs/html5-canvas-drag-and-drop-multiple-shapes-with-kineticjs/
+GameEngine.prototype.init = function(x, y) {
+  this.surfaceWidth = x;
+  this.surfaceHeight = y;
 
-GameEngine.prototype.init = function(ctx) {
-  this.ctx = ctx;
-  this.surfaceWidth = this.ctx.canvas.width;
-  this.surfaceHeight = this.ctx.canvas.height;
-  this.halfSurfaceWidth = this.surfaceWidth/2;
-  this.halfSurfaceHeight = this.surfaceHeight/2;
-
-  this.stage = new Kinetic.Stage("container", this.surfaceWidth, this.surfaceHeight);
-  this.canvas = this.stage.canvas;
-  this.ctx = this.stage.context;
-  this.container = this.stage.getContainer();
+  Kinetic.Stage("container", this.surfaceWidth, this.surfaceHeight);
+//  this.canvas = this.stage.canvas;
+//  this.ctx = this.stage.context;
+//  this.container = this.stage.getContainer();
   this.offsetX = 0;
   this.offsetY = 0;
   this.imgDragging = undefined;
@@ -112,7 +106,7 @@ GameEngine.prototype.init = function(ctx) {
 
   this.container.addEventListener("mousemove", function(){
     if (this.imgDragging) {
-      var mousePos = this.stage.getMousePos();
+//      var mousePos = this.stage.getMousePos();
       this.imgDragging.x = mousePos.x - this.offsetX;
       this.imgDragging.y = mousePos.y - this.offsetY;
       this.imgDragging.draw();

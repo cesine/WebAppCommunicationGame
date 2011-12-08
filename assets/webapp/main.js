@@ -5,11 +5,6 @@ document.body.style.margin = "0px 0px 0px " + 0 + "px";
 var playWoodenPuzzle = function() {
   var game = new WoodenPuzzleSet();
 
-  game.canvas = document.getElementById('surface');
-  game.canvas.setAttribute("width", window.innerWidth*0.99);
-  game.canvas.setAttribute("height", window.innerHeight*.99);
-  game.ctx = game.canvas.getContext('2d');
-
 
   game.ASSET_MANAGER = new AssetManager();
   var pieces = gameset.pieces;
@@ -21,16 +16,16 @@ var playWoodenPuzzle = function() {
    see console_log_output.txt for more info
    TODO turn into a UI element (button) for user to understand what is going on
    */
-  game.soundSwitch= "off";
+  game.soundSwitch = "off";
   console.log("Sound is switched " + game.soundSwitch);
   if(game.soundSwitch !== "off"){
-    game.ASSET_MANAGER.queueSound('alien-boom', 'audio/uh_oh.mp3');
-    game.ASSET_MANAGER.queueSound('bullet-boom', 'audio/cat_pur.mp3');
-    game.ASSET_MANAGER.queueSound('bullet', 'audio/wood_block.mp3');
+    game.ASSET_MANAGER.queueSound('uh_oh', 'audio/uh_oh.mp3');
+    game.ASSET_MANAGER.queueSound('cat_pur', 'audio/cat_pur.mp3');
+    game.ASSET_MANAGER.queueSound('wood_block', 'audio/wood_block.mp3');
   }
 
   game.ASSET_MANAGER.downloadAll(function() {
-    game.init(game.ctx);
+    game.init(window.innerWidth*0.99, window.innerHeight*.99);
     game.start();
   });
 
