@@ -24,7 +24,7 @@ WoodenPuzzleSet.prototype.constructor = WoodenPuzzleSet;
 WoodenPuzzleSet.prototype.start = function() {
 
   console.log("Starting wooden puzzle");
-  //this.background = this.ASSET_MANAGER.getAsset("images/wood_golden.jpg");
+  this.background = this.ASSET_MANAGER.getAsset("images/wood_golden.jpg");
   GameEngine.prototype.start.call(this);
 }
 
@@ -36,8 +36,8 @@ WoodenPuzzleSet.prototype.update = function() {
 
 WoodenPuzzleSet.prototype.draw = function() {
   GameEngine.prototype.draw.call(this, function(game) {
-    //this.stage.context.drawImage(this.background, 0, 0, this.surfaceWidth, this.surfaceHeight);
     console.log("Drawing wooden puzzle in callback");
+    game.context.drawImage(game.background, 0, 0, game.width, game.height);
     game.drawScore();
 
   });
