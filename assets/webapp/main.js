@@ -25,7 +25,7 @@ var playWoodenPuzzle = function() {
   }
 
   game.ASSET_MANAGER.downloadAll(function() {
-    game.init(window.innerWidth*0.99, window.innerHeight*.99);
+    game.init("gamearea_div",window.innerWidth*0.99, window.innerHeight*.99);
     game.start();
   });
 

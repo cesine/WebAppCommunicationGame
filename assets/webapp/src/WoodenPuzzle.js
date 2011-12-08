@@ -16,21 +16,28 @@ PuzzlePiece.prototype.constructor = PuzzlePiece;
 
 
 function WoodenPuzzleSet() {
-
+  GameEngine.call(this);
 }
 WoodenPuzzleSet.prototype = new GameEngine();
 WoodenPuzzleSet.prototype.constructor = WoodenPuzzleSet;
 
 WoodenPuzzleSet.prototype.start = function() {
+
+  console.log("Starting wooden puzzle");
+  //this.background = this.ASSET_MANAGER.getAsset("images/wood_golden.jpg");
   GameEngine.prototype.start.call(this);
 }
 
 WoodenPuzzleSet.prototype.update = function() {
+
+    
   GameEngine.prototype.update.call(this);
 }
 
 WoodenPuzzleSet.prototype.draw = function() {
   GameEngine.prototype.draw.call(this, function(game) {
+    //this.stage.context.drawImage(this.background, 0, 0, this.surfaceWidth, this.surfaceHeight);
+    console.log("Drawing wooden puzzle in callback");
     game.drawScore();
 
   });
@@ -38,7 +45,5 @@ WoodenPuzzleSet.prototype.draw = function() {
 
 
 WoodenPuzzleSet.prototype.drawScore = function() {
-//  this.ctx.fillStyle = "red";
-//  this.ctx.font = "bold 2em Arial";
-//  this.ctx.fillText("Score: " + this.score, -this.surfaceWidth/2 + 50, this.surfaceHeight/2 - 50);
+  console.log("Drawing score");
 }

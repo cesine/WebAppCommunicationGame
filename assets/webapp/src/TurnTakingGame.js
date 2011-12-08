@@ -89,45 +89,28 @@ function GameEngine() {
 
 }
 //http://www.html5canvastutorials.com/labs/html5-canvas-drag-and-drop-multiple-shapes-with-kineticjs/
-GameEngine.prototype.init = function(x, y) {
+GameEngine.prototype.init = function(div, x, y) {
+
   this.surfaceWidth = x;
   this.surfaceHeight = y;
 
-  Kinetic.Stage("container", this.surfaceWidth, this.surfaceHeight);
-//  this.canvas = this.stage.canvas;
-//  this.ctx = this.stage.context;
-//  this.container = this.stage.getContainer();
-  this.offsetX = 0;
-  this.offsetY = 0;
-  this.imgDragging = undefined;
-  this.container.addEventListener("mouseup", function(){
-    this.imgDragging = undefined;
-  }, false);
-
-  this.container.addEventListener("mousemove", function(){
-    if (this.imgDragging) {
-//      var mousePos = this.stage.getMousePos();
-      this.imgDragging.x = mousePos.x - this.offsetX;
-      this.imgDragging.y = mousePos.y - this.offsetY;
-      this.imgDragging.draw();
-    }
-  }, false);
 
 
+  
   this.startInput();
   //document.body.appendChild(this.stats.domElement);
 
-  console.log('game initialized');
+  console.log('Game initialization complete.');
 }
 
 GameEngine.prototype.start = function() {
-  console.log("starting game");
+  console.log("Starting game");
   var that = this;
 
   (function gameLoop() {
     if(this.wait !== true){
       that.loop();
-      requestAnimFrame(gameLoop, that.ctx.canvas);
+      //requestAnimFrame(gameLoop, that.ctx.canvas);
       this.wait  = true;
 
     }
@@ -142,60 +125,32 @@ GameEngine.prototype.pauseGame = function(){
 GameEngine.prototype.startInput = function() {
   console.log('Starting input');
 
-  var getXandY = function(e) {
-    var x =  e.clientX - that.ctx.canvas.getBoundingClientRect().left - (that.ctx.canvas.width/2);
-    var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top - (that.ctx.canvas.height/2);
-    return {x: x, y: y};
-  }
-
-  var that = this;
-
-  this.ctx.canvas.addEventListener("click", function(e) {
-    that.click = getXandY(e);
-  }, false);
-
-  this.ctx.canvas.addEventListener("mousemove", function(e) {
-    that.mouse = getXandY(e);
-  }, false);
-
-  console.log('Input started');
+  /*
+  add mouse listeners?
+   */
+  console.log('Mouse/Touch input started');
 }
 
 GameEngine.prototype.addEntity = function(entity) {
-  this.entities.push(entity);
+
+
 }
 GameEngine.prototype.addPlayer = function(player){
-  this.players.push(player);
+
+
 }
 
 GameEngine.prototype.draw = function(drawCallback) {
-  this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-  this.ctx.save();
-  for (var i = 0; i < this.entities.length; i++) {
-    this.entities[i].draw(this.ctx);
-  }
+  console.log("Drawing game");
+
   if (drawCallback) {
     drawCallback(this);
   }
-  this.ctx.restore();
+  
 }
 
 GameEngine.prototype.update = function() {
-  var entitiesCount = this.entities.length;
 
-  for (var i = 0; i < entitiesCount; i++) {
-    var entity = this.entities[i];
-
-    if (!entity.removeFromWorld) {
-      entity.update();
-    }
-  }
-
-  for (var i = this.entities.length-1; i >= 0; --i) {
-    if (this.entities[i].removeFromWorld) {
-      this.entities.splice(i, 1);
-    }
-  }
 }
 
 GameEngine.prototype.loop = function() {
@@ -226,8 +181,6 @@ function Entity(game, x, y) {
   this.removeFromWorld = false;
 
 
-
-
 }
 
 Entity.prototype.update = function() {
@@ -235,16 +188,7 @@ Entity.prototype.update = function() {
 }
 
 Entity.prototype.draw = function(ctx) {
-  ctx.drawImage(this.sprite, this.x, this.y, this.sprite.width * this.ratio, this.sprite.height * this.ratio);
-
   
-  if (this.game.showOutlines && this.radius) {
-    ctx.beginPath();
-    ctx.strokeStyle = "green";
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-    ctx.stroke();
-    ctx.closePath();
-  }
 }
 
 
