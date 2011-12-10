@@ -392,7 +392,7 @@ GameEngine.prototype.addEntity = function(shape) {
   shape.canvas.style.position = 'absolute';
   this.container.appendChild(shape.canvas);
   this.shapes.push(shape);
-  shape.draw();
+  //shape.draw();
 
 }
 GameEngine.prototype.addPlayer = function(player){
@@ -431,16 +431,16 @@ Player.prototype.playTurn = function(){
   //TODO
 }
 
-function Entity(game, x, y, drawFunc) {
+function Entity(game, drawFunc) {
   this.game = game;
   this.drawFunc = drawFunc;
-  this.x = x;
-  this.y = y;
+  this.x = 0;
+  this.y = 0;
   this.ratio = 0.5;
 
   this.scale = {
-    x: 1,
-    y: 1
+    x: 0.3,
+    y: 0.3
   };
   this.rotation = 0; // radians
   this.eventListeners = {};
@@ -460,7 +460,7 @@ Entity.prototype.update = function() {
 
 Entity.prototype.draw = function(args) {
 
-    var context = this.getContext();
+    var context = this.game.getContext();
     this.clear();
     context.save();
 
@@ -529,7 +529,7 @@ Entity.prototype.moveToTop = function(){
  * over a canvas image to provide a detectable path
  */
 var CommunicationGame = {};
-CommunicationGame.drawImage = function(imageObj, x, y, width, height){
+CommunicationGame.drawImage = function(game, imageObj, x, y, width, height){
   if (!width) {
     width = imageObj.width;
   }
@@ -537,7 +537,7 @@ CommunicationGame.drawImage = function(imageObj, x, y, width, height){
     height = imageObj.height;
   }
   return function(){
-    var context = this.getContext();
+    var context = game.getContext();
     context.drawImage(imageObj, x, y, width, height);
     context.beginPath();
     context.rect(x, y, width, height);
