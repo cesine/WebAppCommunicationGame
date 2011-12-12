@@ -43,23 +43,23 @@ Animation.prototype.drawFrame = function(tick, ctx, x, y, scaleBy) {
     return;
   }
   var index = this.currentFrame();
-  var locX = x - (this.frameWidth/2) * scaleBy;
-  var locY = y - (this.frameHeight/2) * scaleBy;
+  var locX = x - (this.frameWidth / 2) * scaleBy;
+  var locY = y - (this.frameHeight / 2) * scaleBy;
   ctx.drawImage(this.spriteSheet,
-          index*this.frameWidth, 0,  // source from sheet
+          index * this.frameWidth, 0, // source from sheet
           this.frameWidth, this.frameHeight,
           locX, locY,
-          this.frameWidth*scaleBy,
-          this.frameHeight*scaleBy);
-}
+          this.frameWidth * scaleBy,
+          this.frameHeight * scaleBy);
+};
 
 Animation.prototype.currentFrame = function() {
   return Math.floor(this.elapsedTime / this.frameDuration);
-}
+};
 
 Animation.prototype.isDone = function() {
   return (this.elapsedTime >= this.totalTime);
-}
+};
 
 function Timer() {
   this.gameTime = 0;
@@ -75,7 +75,7 @@ Timer.prototype.tick = function() {
   var gameDelta = Math.min(wallDelta, this.maxStep);
   this.gameTime += gameDelta;
   return gameDelta;
-}
+};
 
 function GameEngine() {
   this.players = [];
@@ -116,33 +116,33 @@ GameEngine.prototype.init = function(div, x, y) {
   this.startInput();
   //document.body.appendChild(this.stats.domElement);
 
+
   console.log('Game initialization complete.');
-}
+};
 
 GameEngine.prototype.start = function() {
   console.log("Starting game");
   var that = this;
 
   (function gameLoop() {
-    if(this.wait !== true){
+    if (this.wait !== true) {
       that.loop();
       //requestAnimFrame(gameLoop, that.ctx.canvas);
-      this.wait  = true;
+      this.wait = true;
 
     }
   })();
-}
-GameEngine.prototype.pauseGame = function(){
+};
+GameEngine.prototype.pauseGame = function() {
   this.pause = true;
   alert("Game Paused");
-}
+};
 
 GameEngine.prototype.clear = function(){
   var context = this.getContext();
   var canvas = this.getCanvas();
   context.clearRect(0, 0, canvas.width, canvas.height);
 };
-
 
 GameEngine.prototype.remove = function(shape){
   var shapes = this.shapes;
@@ -168,13 +168,73 @@ GameEngine.prototype.getContext = function(){
   return this.context;
 };
 
+GameEngine.prototype.addEntity = function(shape) {
+  shape.stage = this;
+  shape.canvas = document.createElement('canvas');
+  shape.context = shape.canvas.getContext('2d');
+  shape.id = ++this.idCounter;
+  shape.canvas.width = this.width;
+  shape.canvas.height = this.height;
+  shape.canvas.style.zIndex = ++this.zIndexCounter;
+  shape.canvas.style.position = 'absolute';
+  this.container.appendChild(shape.canvas);
+  this.shapes.push(shape);
 
+  shape.clear = function(){
+    var context = shape.context;
+    var canvas = shape.canvas;
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  };
+  shape.setScale = function(scale){
+    shape.scale.x = scale;
+    shape.scale.y = scale;
+  };
+  shape.addEventListener = function(type, func){
+    var event = (type.indexOf('touch') == -1) ? 'on' + type : type;
+    shape.eventListeners[event] = func;
+  };
+  shape.moveToTop = function(){
+    var stage = shape.stage;
+    // remove shape from shapes
+    for (var n = 0; n < stage.shapes.length; n++) {
+        var reg = stage.shapes[n];
+        if (reg.id == shape.id) {
+            stage.shapes.splice(n, 1);
+            stage.shapes.push(shape);
+            break;
+        }
+    }
+    // reorder canvases
+    for (var n = 0; n < stage.shapes.length; n++) {
+        var reg = stage.shapes[n];
+        reg.canvas.style.zIndex = ++stage.zIndexCounter;
+    }
+  };
+
+  shape.addEventListener("mousedown", function(){
+    console.log("Dragging entity "+ shape.id);
+    var mousePos = shape.stage.getMousePos();
+    shape.moveToTop();
+    offsetX = mousePos.x - shape.x;
+    offsetY = mousePos.y - shape.y;
+    shape.stage.imgDragging = shape;
+  });
+  shape.addEventListener("mouseover", function(){
+    document.body.style.cursor = "pointer";
+  });
+  shape.addEventListener("mouseout", function(){
+    document.body.style.cursor = "default";
+  });
+  //shape.draw();
+  console.log("Done adding shape "+ shape.id);
+
+};
 
 GameEngine.prototype.handleEvent = function(evt){
   if (!evt) {
     evt = window.event;
   }
-
+  console.log("Game engine is handling event");
   this.setMousePosition(evt);
   this.setTouchPosition(evt);
   var that = this;
@@ -325,10 +385,23 @@ GameEngine.prototype.startInput = function() {
     that.handleEvent(evt);
   }, false);
 
+
+
+  this.container.addEventListener("mouseup", function(){
+    that.imgDragging = undefined;
+  }, false);
+
+  this.container.addEventListener("mousemove", function(){
+    if (that.imgDragging) {
+      var mousePos = that.getMousePos();
+      that.imgDragging.x = mousePos.x - offsetX;
+      that.imgDragging.y = mousePos.y - offsetY;
+      that.imgDragging.draw();
+    }
+  }, false);
+  
   console.log('Listening for mouse/touch input.');
 };
-
-
 
 GameEngine.prototype.getMousePos = function(evt){
   return this.mousePos;
@@ -381,24 +454,8 @@ GameEngine.prototype.getContainer = function(){
   return this.container;
 };
 
-GameEngine.prototype.addEntity = function(shape) {
-  shape.stage = this;
-  shape.canvas = document.createElement('canvas');
-  shape.context = shape.canvas.getContext('2d');
-  shape.id = ++this.idCounter;
-  shape.canvas.width = this.width;
-  shape.canvas.height = this.height;
-  shape.canvas.style.zIndex = ++this.zIndexCounter;
-  shape.canvas.style.position = 'absolute';
-  this.container.appendChild(shape.canvas);
-  this.shapes.push(shape);
-  //shape.draw();
-
-}
-GameEngine.prototype.addPlayer = function(player){
-
-
-}
+GameEngine.prototype.addPlayer = function(player) {
+};
 
 GameEngine.prototype.draw = function(drawCallback) {
   console.log("Drawing game");
@@ -407,11 +464,11 @@ GameEngine.prototype.draw = function(drawCallback) {
     drawCallback(this);
   }
 
-}
+};
 
 GameEngine.prototype.update = function() {
 
-}
+};
 
 GameEngine.prototype.loop = function() {
   this.clockTick = this.timer.tick();
@@ -419,7 +476,8 @@ GameEngine.prototype.loop = function() {
   this.draw();
   this.click = null;
   //this.stats.update();
-}
+};
+
 function Player(game, location){
   this.game = game;
   this.location = location;
@@ -431,16 +489,17 @@ Player.prototype.playTurn = function(){
   //TODO
 }
 
-function Entity(game, drawFunc) {
-  this.game = game;
-  this.drawFunc = drawFunc;
-  this.x = 0;
-  this.y = 0;
-  this.ratio = 0.5;
+function Entity(){
+  //do nothing
 
+}
+Entity.prototype.init = function(startingx, startingy, drawFunc) {
+  this.drawFunc = drawFunc;
+  this.x = startingx;
+  this.y = startingy;
   this.scale = {
-    x: 0.3,
-    y: 0.3
+    x: 1,
+    y: 1
   };
   this.rotation = 0; // radians
   this.eventListeners = {};
@@ -448,88 +507,43 @@ function Entity(game, drawFunc) {
   this.clickStart = false;
   this.inDblClickWindow = false;
 
-  //this.sprite = game.ASSET_MANAGER.getAsset("images/nonpublic_cheval_bleu.png");
-  this.removeFromWorld = false;
-
-
 }
 
 Entity.prototype.update = function() {
-
-}
-
-Entity.prototype.draw = function(args) {
-
-    var context = this.game.getContext();
-    this.clear();
-    context.save();
-
-    if (this.x !== 0 || this.y !== 0) {
-        context.translate(this.x, this.y);
-    }
-    if (this.rotation !== 0) {
-        context.rotate(this.rotation);
-    }
-    if (this.scale.x != 1 || this.scale.y != 1) {
-        context.scale(this.scale.x, this.scale.y);
-    }
-
-    this.drawFunc(args);
-    context.restore();
-}
-
-
-
-Entity.prototype.getCanvas = function(){
-    return this.canvas;
+  console.log("Updating entity " + this.id);
 };
 
-Entity.prototype.getContext = function(){
-    return this.context;
-};
 
-Entity.prototype.setScale = function(scale){
-    this.scale.x = scale;
-    this.scale.y = scale;
-};
 
+//its not finding this function, or any of the other ones.
 Entity.prototype.clear = function(){
-    var context = this.getContext();
-    var canvas = this.getCanvas();
+    var context = this.context;
+    var canvas = this.canvas;
     context.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-Entity.prototype.addEventListener = function(type, func){
-    var event = (type.indexOf('touch') == -1) ? 'on' + type : type;
-    this.eventListeners[event] = func;
+Entity.prototype.draw = function(args) {
+  console.log("Drawing entity " + this.id);
+  var context = this.context;
+  this.clear();
+  context.save();
+
+  if (this.x !== 0 || this.y !== 0) {
+    context.translate(this.x, this.y);
+  }
+  if (this.rotation !== 0) {
+    context.rotate(this.rotation);
+  }
+  if (this.scale.x != 1 || this.scale.y != 1) {
+    context.scale(this.scale.x, this.scale.y);
+  }
+
+  this.drawFunc(args);
+  context.restore();
 };
-
-Entity.prototype.moveToTop = function(){
-    var stage = this.stage;
-    // remove shape from shapes
-    for (var n = 0; n < stage.shapes.length; n++) {
-        var reg = stage.shapes[n];
-        if (reg.id == this.id) {
-            stage.shapes.splice(n, 1);
-            stage.shapes.push(this);
-            break;
-        }
-    }
-
-    // reorder canvases
-    for (var n = 0; n < stage.shapes.length; n++) {
-        var reg = stage.shapes[n];
-        reg.getCanvas().style.zIndex = ++stage.zIndexCounter;
-    }
-};
-
-/****************************************
- * drawImage util
- * This util function draws a rectangular shape
- * over a canvas image to provide a detectable path
- */
-var CommunicationGame = {};
-CommunicationGame.drawImage = function(game, imageObj, x, y, width, height){
+CommunicationGame = {};
+CommunicationGame.drawImage = function(imageObj, x, y, width, height){
+  //console.log("Drawing "+ width +" by "+ height);
   if (!width) {
     width = imageObj.width;
   }
@@ -537,7 +551,7 @@ CommunicationGame.drawImage = function(game, imageObj, x, y, width, height){
     height = imageObj.height;
   }
   return function(){
-    var context = game.getContext();
+    var context = this.context;
     context.drawImage(imageObj, x, y, width, height);
     context.beginPath();
     context.rect(x, y, width, height);

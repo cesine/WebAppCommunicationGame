@@ -29,10 +29,19 @@ WoodenPuzzleSet.prototype.start = function() {
 
     //var darthVaderImg = new Kinetic.Shape(Kinetic.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, 200, 137));
 
-    this.addEntity(new PuzzlePiece(this, CommunicationGame.drawImage(this, this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, 200, 137)));
+    //this.addEntity(new PuzzlePiece(this, CommunicationGame.drawImage(this, this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, 200, 137)));
+    var e = new PuzzlePiece();
+    var width = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).width * pieces4[j].ratio);
+    var height = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).height * pieces4[j].ratio);
+    e.init(100, 200, 30, 50, CommunicationGame.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, width, height));
 
+
+
+
+    this.addEntity(e);
   }
 
+  
   GameEngine.prototype.start.call(this);
 };
 
