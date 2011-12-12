@@ -583,6 +583,10 @@ CommunicationGame.drawImage = function(imageObj, x, y, width, height){
   }
   return function(){
     var context = this.context;
+    context.shadowColor = "#663300";
+    context.shadowOffsetX = 3;
+    context.shadowOffsetY = 3;
+    context.shadowBlur = 3;
     context.drawImage(imageObj, x, y, width, height);
     context.beginPath();
     context.rect(x, y, width, height);

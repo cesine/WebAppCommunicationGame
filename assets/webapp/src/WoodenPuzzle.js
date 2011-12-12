@@ -27,16 +27,11 @@ WoodenPuzzleSet.prototype.start = function() {
   var pieces4 = gameset.pieces4;
   for (var j = 0; j < pieces4.length; j++){
 
-    //var darthVaderImg = new Kinetic.Shape(Kinetic.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, 200, 137));
-
-    //this.addEntity(new PuzzlePiece(this, CommunicationGame.drawImage(this, this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, 200, 137)));
     var e = new PuzzlePiece();
     var width = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).width / this.ASSET_MANAGER.getAsset(pieces4[j].src).width * pieces4[j].ratio * this.width    );
     var height = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).height / this.ASSET_MANAGER.getAsset(pieces4[j].src).width * pieces4[j].ratio * this.width  );
-    console.log("Scaled height " + height);
+
     e.init(pieces4[j].x*this.width, pieces4[j].y*this.height, pieces4[j].x*this.width, pieces4[j].y*this.height, pieces4[j].src, CommunicationGame.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, width, height));
-
-
 
 
     this.addEntity(e);
@@ -56,6 +51,10 @@ WoodenPuzzleSet.prototype.draw = function() {
   GameEngine.prototype.draw.call(this, function(game) {
     console.log("Drawing wooden puzzle in callback");
     game.context.drawImage(game.background, 0, 0, game.width, game.height);
+    game.context.shadowColor = "#663300";
+    game.context.shadowOffsetX = 20;
+    game.context.shadowOffsetY = 20;
+    game.context.shadowBlur = 30;
     game.context.drawImage(game.tray.sprite, game.tray.x, game.tray.y, game.tray.sprite.width * game.tray.ratio, game.tray.sprite.height * game.tray.ratio);
     game.drawScore();
 
