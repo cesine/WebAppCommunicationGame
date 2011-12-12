@@ -7,11 +7,11 @@ PuzzlePiece = function(){
 //PuzzlePiece.prototype = new Entity();
 PuzzlePiece.prototype.constructor = PuzzlePiece;
 
-PuzzlePiece.prototype.init = function(startingx, startingy, correctx, correcty, drawFunc){
+PuzzlePiece.prototype.init = function(startingx, startingy, correctx, correcty, src, drawFunc){
   Entity.prototype.init.call(this, startingx, startingy, drawFunc);
   this.correctX = correctx;
   this.correctY = correcty;
-  this.targetUtterance = ""; //target utterance
+  this.targetUtterance = src.replace(".png","").replace("images/nonpublic_",""); //target utterance
 };
 PuzzlePiece.prototype.draw = function(){
   Entity.prototype.draw.call(this);

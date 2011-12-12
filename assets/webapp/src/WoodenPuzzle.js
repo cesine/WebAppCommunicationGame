@@ -33,7 +33,7 @@ WoodenPuzzleSet.prototype.start = function() {
     var e = new PuzzlePiece();
     var width = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).width * pieces4[j].ratio);
     var height = parseInt(this.ASSET_MANAGER.getAsset(pieces4[j].src).height * pieces4[j].ratio);
-    e.init(100, 200, 30, 50, CommunicationGame.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, width, height));
+    e.init(pieces4[j].x*this.width, pieces4[j].y*this.height, pieces4[j].x*this.width, pieces4[j].y*this.height, pieces4[j].src, CommunicationGame.drawImage(this.ASSET_MANAGER.getAsset(pieces4[j].src), pieces4[j].x, pieces4[j].y, width, height));
 
 
 

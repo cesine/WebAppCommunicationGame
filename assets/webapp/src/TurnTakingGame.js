@@ -242,7 +242,7 @@ GameEngine.prototype.handleEvent = function(evt){
   if (!evt) {
     evt = window.event;
   }
-  console.log("Game engine is handling event");
+  console.log("Game engine is handling event ");
   this.setMousePosition(evt);
   this.setTouchPosition(evt);
   var that = this;
@@ -398,6 +398,9 @@ GameEngine.prototype.startInput = function() {
   Overriding the above default listeners
    */
   this.container.addEventListener("mouseup", function(){
+    if(that.imgDragging != null){
+      console.log("Stopped dragging "+ that.imgDragging.id);
+    }
     that.imgDragging = undefined;
   }, false);
 
@@ -413,6 +416,9 @@ GameEngine.prototype.startInput = function() {
 
 
   this.container.addEventListener("touchend", function(){
+    if(that.imgDragging != null){
+      console.log("Stopped dragging "+ that.imgDragging.id);
+    }
     that.imgDragging = undefined;
   }, false);
 

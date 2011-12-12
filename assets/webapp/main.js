@@ -78,3 +78,11 @@ var playAliens = function() {
 
 var game4 = playWoodenPuzzle();
 //game4.pauseGame();
+
+
+//utilities for export
+var printxy = function(){
+ for (var j = 0; j < game4.shapes.length; j++){
+   console.log("x:"+game4.shapes[j].x/game4.width+", y:"+game4.shapes[j].y/game4.height+", src: "+ game4.shapes[j].targetUtterance);
+ }
+}
