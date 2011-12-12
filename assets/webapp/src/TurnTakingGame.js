@@ -219,6 +219,14 @@ GameEngine.prototype.addEntity = function(shape) {
     offsetY = mousePos.y - shape.y;
     shape.stage.imgDragging = shape;
   });
+  shape.addEventListener("touchstart", function(){
+    console.log("Dragging entity "+ shape.id);
+    var mousePos = shape.stage.getTouchPos();
+    shape.moveToTop();
+    offsetX = mousePos.x - shape.x;
+    offsetY = mousePos.y - shape.y;
+    shape.stage.imgDragging = shape;
+  });
   shape.addEventListener("mouseover", function(){
     document.body.style.cursor = "pointer";
   });
@@ -386,7 +394,9 @@ GameEngine.prototype.startInput = function() {
   }, false);
 
 
-
+  /*
+  Overriding the above default listeners
+   */
   this.container.addEventListener("mouseup", function(){
     that.imgDragging = undefined;
   }, false);
@@ -399,7 +409,22 @@ GameEngine.prototype.startInput = function() {
       that.imgDragging.draw();
     }
   }, false);
-  
+
+
+
+  this.container.addEventListener("touchend", function(){
+    that.imgDragging = undefined;
+  }, false);
+
+  this.container.addEventListener("touchmove", function(){
+    if (that.imgDragging) {
+      var mousePos = that.getTouchPos();
+      that.imgDragging.x = mousePos.x - offsetX;
+      that.imgDragging.y = mousePos.y - offsetY;
+      that.imgDragging.draw();
+    }
+  }, false);
+
   console.log('Listening for mouse/touch input.');
 };
 
